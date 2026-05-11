@@ -1,7 +1,9 @@
-// Implementa las Solicitudes con Fetch
+//** Contenedores y botones comunes
 const fetchBtn = document.getElementById("fetch-btn");
+const axiosBtn = document.getElementById("axios-btn");
 const dataContainer = document.getElementById("data-container");
 
+//** 1. Implementación con Fetch
 fetchBtn.addEventListener("click", () => {
   fetch("https://rickandmortyapi.com/api/character")
     .then((response) => {
@@ -11,8 +13,8 @@ fetchBtn.addEventListener("click", () => {
       return response.json();
     })
     .then((data) => {
-      // Completar: renderizar datos en el contenedor
-      // Pista: Usa `data.results` para iterar sobre los personajes obtenidos.
+        // Completado: Usamos data.results para obtener el arreglo de personajes
+        renderCharacters(data.results);
     })
     .catch((error) => {
       console.error("Error:", error);
@@ -20,21 +22,16 @@ fetchBtn.addEventListener("click", () => {
     });
 });
 
-// Implementa las Solicitudes con Axios
-
-// 1. Instala Axios o inclúyelo mediante una CDN:
-//   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-// 2. Escribe una función que utilice Axios para obtener los datos y manejarlos de manera similar a `fetch`.
-
-const axiosBtn = document.getElementById("axios-btn");
+//** 2. Implementación con Axios
 
 axiosBtn.addEventListener("click", () => {
   axios
     .get("https://rickandmortyapi.com/api/character")
     .then((response) => {
       const data = response.data;
-      // Completar: renderizar datos en el contenedor
-      // Pista: Observa que Axios ya convierte la respuesta JSON, por lo que no necesitas usar `.json()`.
+     // Completado: En axios, la data ya viene parseada en el atributo .data
+     // Accedemos a .results dentro de la respuesta de la API
+     renderCharacters(response.data.results);
     })
     .catch((error) => {
       console.error("Error:", error);
@@ -42,15 +39,17 @@ axiosBtn.addEventListener("click", () => {
     });
 });
 
-// Ejemplo de función de renderizado:
-// Puedes adecuar este código
+//** Función para renderizar los personajes en el contenedor
 function renderCharacters(characters) {
+    // Limpiamos el contenedor antes de agregar nuevos datos
   dataContainer.innerHTML = "";
+
   characters.forEach((character) => {
     const characterElement = document.createElement("div");
     characterElement.innerHTML = `
       <h3>${character.name}</h3>
       <img src="${character.image}" alt="${character.name}">
+      <p>Estado: ${character.status}</p>
     `;
     dataContainer.appendChild(characterElement);
   });
